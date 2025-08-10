@@ -6,7 +6,7 @@ backgroundImage: url('./assets/background-2025.jpg')
 author: Riccardo Cardin
 lang: en
 color: #111111
-footer: "Riccardo Cardin - Ticino Software Craft - 2025-05-28"
+footer: "Riccardo Cardin - Scala Days 2025"
 
 marp: true
 ---
@@ -17,7 +17,7 @@ marp: true
     background-color: #ffffff00;
   }
   h1, h3, h4 {
-    color:rgb(47, 95, 4);
+    color:rgba(39, 86, 153, 1);
   }
   section > *  {
     background-color: #ffffff77;
@@ -28,7 +28,7 @@ marp: true
 <!-- _paginate: false -->
 <!-- _footer: "" -->
 
-# Do You Even Handle Effects?
+# Yo Dawg, Heard You Want To FlatMap Your Direct-Style
 ### Direct-Style Effect System in Scala
 
 ---
@@ -39,7 +39,7 @@ marp: true
 
 ---
 
-# Agenda
+# &nbsp;&nbsp;Agenda
 
 * 👋 Who Am I?
 * ❤️ Effects and 💔 Side Effects
@@ -50,7 +50,7 @@ marp: true
 
 ___
 
-# Who Am I?
+# &nbsp;&nbsp;Who Am I?
 
 - Hello there 👋, I'm **Riccardo Cardin**, 
     * An Enthusiastic Scala Lover since 2011 💯
@@ -64,7 +64,7 @@ ___
 
 ---
 
-# Why We ❤️ Functional Programming
+# &nbsp;&nbsp;Why We ❤️ Functional Programming
 
 * We have the **substitution model** for reasoning about programs
 ```scala 3
@@ -77,7 +77,7 @@ def timesTwo(i: Int): Int = plusOne(plusOne(i))
 
 ---
 
-# We Live in an Imperfect World 💔
+# &nbsp;&nbsp;We Live in an Imperfect World 💔
 
 > Model a coin toss, but with a twist: the gambler might be too drunk and lose the coin
 
@@ -95,7 +95,7 @@ def drunkFlip(): String = {
 
 ---
 
-# We Live in an Imperfect World 💔
+# &nbsp;&nbsp;We Live in an Imperfect World 💔
 
 * We can't use the substitution model for all programs
   * If the `drunkFlip` function throws an _exception_, the substitution model breaks
@@ -107,7 +107,7 @@ def drunkFlip(): String = {
 
 ---
 
-# Side Effects
+# &nbsp;&nbsp;Side Effects
 
 * **Side Effect**: An _unpredictable change_ in the state of the world
   * *Unmanaged*, they just happen
@@ -122,7 +122,7 @@ def divide(a: Int, b: Int): Int = a / b
 
 ---
 
-# The Effect Pattern
+# &nbsp;&nbsp;The Effect Pattern
 
 When a side effect is _tracked_ and _controlled_ we call it an **effect**
   1. The _type_ of the function should tell us what effects it can perform and what's the type of the result
@@ -141,7 +141,7 @@ It enables the use of the **substitution model** again 🚀 🎉
     }
 </style>
 
-# The Effect Pattern
+# &nbsp;&nbsp;The Effect Pattern
 
 ![width:1130](./assets/effect-pattern.png)
 © Adam Rosien, Essential Effects
@@ -153,7 +153,7 @@ section h3 {
 }
 </style>
 
-# Fun Fact 🤡
+# &nbsp;&nbsp;Fun Fact 🤡
 
 Which is the first try of an effect system on the JVM? 🤔
 
@@ -169,7 +169,7 @@ String readFile(String path) throws IOException { /*... */ }
 
 ---
 
-# An Effect Example
+# &nbsp;&nbsp;An Effect Example
 
 We can use **Monads**, `F[A]`, (which fits well for the task)
 
@@ -186,7 +186,7 @@ val maybeString: Option[String] = maybeInt.map(_.toString)
 
 ---
 
-# Gently Reminder
+# &nbsp;&nbsp;Gently Reminder
 
 Calling `map` and `flatMap` is cumbersome and boring  😴
 
@@ -206,7 +206,7 @@ val maybeString: Option[String] = for {
 
 ---
 
-# Effect Systems
+# &nbsp;&nbsp;Effect Systems
 
 An **Effect System** is the implementation of the _Effect Pattern_
 
@@ -223,7 +223,7 @@ In an effect system, a side effect 👎 becomes a **tracked** effect 👍
 
 ---
 
-# Cats Effect
+# &nbsp;&nbsp;Cats Effect
 
 * Cats Effect uses the `IO[A]` data type to model effects
   * `IO[A]` is an _über effect_ that models any effectful computation that returns a value of type `A` and can fail with a `Throwable`
@@ -234,7 +234,7 @@ In an effect system, a side effect 👎 becomes a **tracked** effect 👍
 
 ---
 
-# Cats Effect
+# &nbsp;&nbsp;Cats Effect
 
 Let's rewrite the `drunkFlip` function using the `IO` effect
 
@@ -252,7 +252,7 @@ The `drunkFlip` function returns a _recipe_ of the program
 
 ---
 
-# Cats Effect
+# &nbsp;&nbsp;Cats Effect
 
 The library provides many ways to _run_ the effect
 
@@ -269,7 +269,7 @@ val resultF: Future[String] = drunkFlip.unsafeToFuture()
 ```
 ---
 
-# Cats Effect
+# &nbsp;&nbsp;Cats Effect
 
 The `IO[A]` hides the exact side effects that were performed. We can make them explicit using _Tagless Final_ syntax and an MTL library
 
@@ -286,7 +286,7 @@ The cognitive load is higher here 😱
 
 ___
 
-# ZIO
+# &nbsp;&nbsp;ZIO
 
 * `ZIO[R, E, A]` introduces the error type `E` and dependencies `R` in the effect definition
   * It's still a monad on the `A` type (`map` and `flatMap`)
@@ -297,7 +297,7 @@ ___
 
 ---
 
-# ZIO
+# &nbsp;&nbsp;ZIO
 
 The `drunkFlip` function using `ZIO` effect is the following:
 
@@ -315,7 +315,7 @@ def drunkFlip: ZIO[Random, String, String] =
 
 ---
 
-# ZIO
+# &nbsp;&nbsp;ZIO
 
 Running the effect means providing needed dependencies or _layers_ 
 
@@ -333,7 +333,7 @@ object Main extends ZIOAppDefault {
 
 ---
 
-# Kyo: Meet Algebraic Effects
+# &nbsp;&nbsp;Kyo: Meet Algebraic Effects
 
 What if we can have types _listing Effect separately_ and _handling_ them virtually _once at a time_?
 
@@ -347,7 +347,7 @@ def drunkFlip: String < (IO & Abort[String]) = ???
 
 ---
 
-# Kyo: Meet Algebraic Effects
+# &nbsp;&nbsp;Kyo: Meet Algebraic Effects
 
 * Each effect has its own _rich algebra_ to describe the operations
 
@@ -364,7 +364,7 @@ def drunkFlip: String < (IO & Abort[String]) = for {
 
 ---
 
-# Kyo: Meet Algebraic Effects
+# &nbsp;&nbsp;Kyo: Meet Algebraic Effects
 
 We can decide to _handle each effect separately_ (no über effect)
 
@@ -385,7 +385,7 @@ val partialResult: Result[String, String] < IO = Abort.run { drunkFlip }
 
 ---
 
-# Build Your Own Effects System 🛠️
+# &nbsp;&nbsp;Build Your Own Effects System 🛠️
 
 * All the effect systems we've seen are based on _monads_ properties to _compose effectful functions_
   * They use combinators, `flatMap` and `map`, for sequencing
@@ -398,7 +398,7 @@ Can we do better (or at least different)? 🤔
 
 ---
 
-# What's the Direct-Style? 🛝
+# &nbsp;&nbsp;What's the Direct-Style? 🛝
 
 ```scala 3
 val caught = scala.util.Random.nextBoolean() // <- No monads here
@@ -416,7 +416,7 @@ Let's try to build an effect system using _functions_ instead of _values_ 🛠�
   
 ---
 
-# Model the Effects' Algebra 🛠️
+# &nbsp;&nbsp;Model the Effects' Algebra 🛠️
 
 We'll focus on the `drunkFlip` example. We need effects that model 
 ✔️ non-determinism (`Random`), 
@@ -433,7 +433,7 @@ trait Raise[-E] { // <- `E` represents the error type
 
 ---
 
-# Access Std Library as an Effect
+# &nbsp;&nbsp;Access Std Library as an Effect
 
 We need now to wrap the standard library with the effects
 
@@ -449,7 +449,7 @@ We call the variable `unsafe` ☣️ because it gives _direct_, _uncontrolled_ a
 
 ___
 
-# Access Std Library as an Effect
+# &nbsp;&nbsp;Access Std Library as an Effect
 
 We want to give tracked access to the side effects. Let's add some functions (a DSL) to our `object Random`
 
@@ -464,7 +464,7 @@ To generate a random `Boolean`, we need to _provide_ an instance of the `Random`
 
 ---
 
-# Gently Reminder: Part 2
+# &nbsp;&nbsp;Gently Reminder: Part 2
 
 ```scala 3
 def nextBoolean(using r: Random): Boolean
@@ -482,7 +482,7 @@ val result2: Boolean = Random.nextBoolean(using random) // <- works too
 
 ---
 
-# Wrap It All Together
+# &nbsp;&nbsp;Wrap It All Together
 
 We have now all the bricks to build the `drunkFlip` function again 🙌
 
@@ -500,7 +500,7 @@ Is it magic 🪄? Variables `caught` and `heads` are treated as `Boolean`?! 🤯
 
 ---
 
-# Welcome Context Functions 👋
+# &nbsp;&nbsp;Welcome Context Functions 👋
 
 * Scala 3 introduces **Context Functions**, fancy anonymous functions with only _implicit context parameters_
 
@@ -518,7 +518,7 @@ def drunkFlip(using Random, Raise[String]): String = {
 
 ---
 
-# Welcome Context Functions 👋
+# &nbsp;&nbsp;Welcome Context Functions 👋
 
 Behind the scenes, the Scala compiler rewrites the context function using a _surrogate type, not visible to the user_
 
@@ -537,7 +537,7 @@ val program: new ContextFunction2[Raise[String], Random, String] {
 
 ---
 
-# Handle the Effects
+# &nbsp;&nbsp;Handle the Effects
 
 * Handlers are the structures that effectively _run_ effectful functions
 
@@ -556,7 +556,7 @@ object Raise {
 
 ---
 
-# Handle the Effects
+# &nbsp;&nbsp;Handle the Effects
 
 * The Handler for the `Raise[E]` effect provides the `given` instance of the context parameter
   * We used the `boundary` and `break` functions to _control_ the effect
@@ -569,7 +569,7 @@ val program: Random ?=> String | String = Raise.run { drunkFlip }
   * It's _curryfication_, but on a context parameters level
 ---
 
-# Handle the Effects
+# &nbsp;&nbsp;Handle the Effects
 
 * Changing the handler changes the _behavior_ of the program
   * We can handle a `Raise[E] ?=> A` as an `Either[E, A]`
@@ -588,7 +588,7 @@ object Raise {
 
 ---
 
-# Handle the Effects
+# &nbsp;&nbsp;Handle the Effects
 
 Implementing the `Random` handler is relatively easy 👍
 
@@ -608,7 +608,7 @@ def test(fixed: Boolean)(program: Random ?=> Boolean) = {
 
 ---
 
-# Handle the Effects
+# &nbsp;&nbsp;Handle the Effects
 
 * We can run all the effects of the `drunkFlip` function _stacking_ the handlers
   * We should do it at the _boundaries_ of the system
@@ -624,7 +624,7 @@ val result: Either[String, String] = Random.run {
 
 ---
 
-# Properties of the Effect System
+# &nbsp;&nbsp;Properties of the Effect System
 
 * We can say this Effect System uses **Direct-Style Effect Handlers**
 * It implements the _Effect Pattern_
@@ -639,7 +639,7 @@ type Effect[E, A] = E ?=> A
 
 ---
 
-# Goodbye Referential Transparency 👋
+# &nbsp;&nbsp;Goodbye Referential Transparency 👋
 
 ```scala 3
 def drunkFlip(using Random, Raise[String]): String = {
@@ -657,7 +657,7 @@ def drunkFlip(using Random, Raise[String]): String = {
 
 ___
 
-# The `def` Trick 🪄
+# &nbsp;&nbsp;The `def` Trick 🪄
 
 ```scala 3
 def drunkFlip(using Random, Raise[String]): String = {
@@ -675,7 +675,7 @@ def drunkFlip(using Random, Raise[String]): String = {
 
 ___
 
-# Do We Like Direct-Style?
+# &nbsp;&nbsp;Do We Like Direct-Style?
 
 💔 We lost referential transparency, but...
 
@@ -689,7 +689,7 @@ Probably, it is not the best solution for every problem, but it is a **valid alt
 
 ---
 
-# Where's My `IO` Effect?
+# &nbsp;&nbsp;Where's My `IO` Effect?
 
 * Sometimes bad things happen. _Unpredictable_ errors are thrown
 * We want to execute an effectful function in a _dedicated process_
@@ -708,7 +708,7 @@ object IO {
 
 ___
 
-# Where's My `IO` Effect?
+# &nbsp;&nbsp;Where's My `IO` Effect?
 
 * We can use Java Virtual Threads
   * Virtual Threads are implemented using _continuations_
@@ -730,7 +730,7 @@ val result: Try[Int] = IO.runBlocking { program }
 
 ---
 
-# Bonus Track
+# &nbsp;&nbsp;Bonus Track
 
 What if we can define `flatMap` and `map` in our Effect System 🤓?
 
@@ -748,7 +748,7 @@ object Effect {
 
 ---
 
-# Bonus Track
+# &nbsp;&nbsp;Bonus Track
 
 We need to refactor the effects and the handlers accordingly (the refactor of the `Raise[E]` effect is omitted)
 
@@ -766,7 +766,7 @@ object Random {
 
 ---
 
-# Bonus Track
+# &nbsp;&nbsp;Bonus Track
 
 We can rewrite the `drunkFlip` function using the new DSL:
 
@@ -788,7 +788,7 @@ If we substitute `inline` functions, we return to the version of `drunkFlip` tha
 
 ---
 
-# Conclusions
+# &nbsp;&nbsp;Conclusions
 
 * We defined what is a _side effect_ and why we don't like it
 * We introduced the _Effect Pattern_ and the _Effect Systems_ to manage side effects in a controlled way
@@ -801,7 +801,7 @@ If we substitute `inline` functions, we return to the version of `drunkFlip` tha
 
 <!-- _class: lead -->
 
-# By the way...
+# &nbsp;&nbsp;By the way...
  
 **YÆS**, _Yet Another Effect System_, 
 is a library implementing what we've seen today 😜
@@ -820,12 +820,12 @@ is a library implementing what we've seen today 😜
 
 <!-- _class: lead -->
 
-## Final Thoughts?  
+# Final Thoughts?  
 🙋‍♂️ Happy to take questions !  
 
 ---
 
-# References📚
+# &nbsp;&nbsp;References📚
 
 * [Essential Effects](https://essentialeffects.dev/), Adam Rosien
 * [Effect Oriented Programming](https://effectorientedprogramming.com/), Bill Frasure, Bruce Eckel, James Ward
@@ -834,7 +834,7 @@ is a library implementing what we've seen today 😜
 
 ---
 
-# References 📚
+# &nbsp;&nbsp;References 📚
 
 * [Kyo](https://getkyo.io/), Streamlined Algebraic Effects, Simplified Functional Programming, Peak Scala Performance
 * [Scala 3 Context Functions](https://docs.scala-lang.org/scala3/reference/contextual/context-functions.html)
