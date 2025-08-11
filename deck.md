@@ -155,7 +155,7 @@ section h3 {
 
 # &nbsp;&nbsp;Fun Fact 🤡
 
-Which is the first try of an effect system on the JVM? 🤔
+Which is the first (involuntary) try of an effect system on the JVM?
 
 ### 🤪 Java Checked Exceptions 🤪
 
@@ -289,11 +289,11 @@ ___
 # &nbsp;&nbsp;ZIO
 
 * `ZIO[R, E, A]` introduces the error type `E` and dependencies `R` in the effect definition
-  * It's still a monad on the `A` type (`map` and `flatMap`)
+  * It's still **a monad on the `A`** type (`map` and `flatMap`)
   * It provides a _rich algebra_ on the `ZIO` type to avoid monad transformers
-  * It's a _referentially transparent_ and _lazy_ effect
+  * It's a **referentially transparent** and **lazy** effect
   * It provides _structured concurrency_ primitives
-  * ...still a über effect
+  * ...still a **über effect**
 
 ---
 
@@ -349,7 +349,7 @@ def drunkFlip: String < (IO & Abort[String]) = ???
 
 # &nbsp;&nbsp;Kyo: Meet Algebraic Effects
 
-* Each effect has its own _rich algebra_ to describe the operations
+* Each effect has its own **rich algebra** to describe the operations
 
 ```scala 3
 def drunkFlip: String < (IO & Abort[String]) = for {
@@ -358,7 +358,7 @@ def drunkFlip: String < (IO & Abort[String]) = for {
 } yield if (heads) "Heads" else "Tails"
 ```
 
-* Kyo uses a _monad_ to represent the effectful computation
+* **Kyo uses a monad** to represent the effectful computation
   * The `<` type is an alias for a monad indeed 😅
   * We still have to use `flatMap` and `map` 
 
@@ -366,7 +366,7 @@ def drunkFlip: String < (IO & Abort[String]) = for {
 
 # &nbsp;&nbsp;Kyo: Meet Algebraic Effects
 
-We can decide to _handle each effect separately_ (no über effect)
+We can decide to _handle each effect separately_ (**no über effect**)
 
 ```scala 3
 val partialResult: Result[String, String] < IO = Abort.run { drunkFlip }
@@ -387,10 +387,10 @@ val partialResult: Result[String, String] < IO = Abort.run { drunkFlip }
 
 # &nbsp;&nbsp;Build Your Own Effects System 🛠️
 
-* All the effect systems we've seen are based on _monads_ properties to _compose effectful functions_
+* All the effect systems we've seen are based on **monads** properties to _compose effectful functions_
   * They use combinators, `flatMap` and `map`, for sequencing
   * Programs are represented by **values**
-  * They are _referentially transparent_ and _lazy_
+  * They are **referentially transparent** and **lazy**
 
 However, their step curve is _steep_ and _hard to learn_ for newbies 😱 
 
@@ -409,7 +409,7 @@ However, we need **deferred execution** and to track the effects
 val caught: Random => Boolean = r => r.nextBoolean 
 ```
 
-* Working with _functions_ instead of _values_ could be cumbersome 🙄
+* Working with **functions instead of values** could be cumbersome
   * ...or maybe not? 🤔
 
 Let's try to build an effect system using _functions_ instead of _values_ 🛠️
@@ -445,13 +445,13 @@ object Random {
   }
 }
 ```
-We call the variable `unsafe` ☣️ because it gives _direct_, _uncontrolled_ access to the side effect 
+We call the variable `unsafe` ☣️ because it gives **direct**, **uncontrolled** access to the side effect
 
 ___
 
 # &nbsp;&nbsp;Access Std Library as an Effect
 
-We want to give tracked access to the side effects. Let's add some functions (a DSL) to our `object Random`
+We want to give **tracked access** to the side effects. Let's add some functions (a DSL) to our `object Random`
 
 ```scala 3
 object Random {
@@ -471,8 +471,8 @@ def nextBoolean(using r: Random): Boolean
 ```
 
 * What's the `using` keyword? 🤔
-  * It's a context parameter, needed to execute the function 
-  * To run the function, the compiler must find an _implicit_/_given_ value of type `Random` in the scope
+  * It's a **context parameter**, needed to execute the function 
+  * To run the function, the **compiler must find** an _implicit_/_given_ value of type `Random` in the scope
 
 ```scala 3
 given random: Random = ???
@@ -496,7 +496,7 @@ def drunkFlip(using Random, Raise[String]): String = {
   }
 ```
 
-Is it magic 🪄? Variables `caught` and `heads` are treated as `Boolean`?! 🤯
+Magic 🪄? Variables `caught` and `heads` are treated as `Boolean`?! 🤯
 
 ---
 
@@ -539,7 +539,7 @@ val program: new ContextFunction2[Raise[String], Random, String] {
 
 # &nbsp;&nbsp;Handle the Effects
 
-* Handlers are the structures that effectively _run_ effectful functions
+* **Handlers** are the structures that effectively **run** effectful functions
 
 ```scala 3
 object Raise {
@@ -566,7 +566,7 @@ val program: Random ?=> String | String = Raise.run { drunkFlip }
 ```
 
 * The `Raise.run` handler _runs_ the `Raise` effect, leaving the `Random` effect _untouched_ 🥷
-  * It's _curryfication_, but on a context parameters level
+  * It's **curryfication**, but **on context parameters**
 ---
 
 # &nbsp;&nbsp;Handle the Effects
@@ -628,18 +628,18 @@ val result: Either[String, String] = Random.run {
 
 * We can say this Effect System uses **Direct-Style Effect Handlers**
 * It implements the _Effect Pattern_
-  * The type tells us the used _effects_ and the type of the _result_
-  * The execution is _deferred_
+  * The type **tracks** the used _effects_ and the type of the _result_
+  * The execution is **deferred**
 
 ```scala 3
 type Effect[E, A] = E ?=> A
 ```
 
-* We have lost _referential transparency_ 😰
+* **We have lost referential transparency** 😰
 
 ---
 
-# &nbsp;&nbsp;Goodbye Referential Transparency 👋
+# &nbsp;&nbsp;Bye Referential Transparency 👋
 
 ```scala 3
 def drunkFlip(using Random, Raise[String]): String = {
@@ -670,7 +670,7 @@ def drunkFlip(using Random, Raise[String]): String = {
   }
 ```
 
-* Using the `def` keyword, we can _defer_ the evaluation of `genRand`
+* The `def` keyword **defers** the evaluation of `genRand`
   * But do we need referential transparency? 🤔
 
 ___
@@ -691,7 +691,7 @@ Probably, it is not the best solution for every problem, but it is a **valid alt
 
 # &nbsp;&nbsp;Where's My `IO` Effect?
 
-* Sometimes bad things happen. _Unpredictable_ errors are thrown
+* Sometimes bad things happen. **Unpredictable errors** are thrown
 * We want to execute an effectful function in a _dedicated process_
 
 ```scala 3
@@ -711,10 +711,10 @@ ___
 # &nbsp;&nbsp;Where's My `IO` Effect?
 
 * We can use Java Virtual Threads
-  * Virtual Threads are implemented using _continuations_
+  * Virtual Threads use **one-shot continuations**
   * They represent _fibers_ 🧶, or _green threads_ on the JVM
   * From Java 24, they are also safe for `synchronized` blocks 🎉
-  * They support _structured concurrency_ 🤝
+  * They support **structured concurrency** 🤝
 
 ```scala 3
 val program: IO ?=> Int = IO {
@@ -732,7 +732,7 @@ val result: Try[Int] = IO.runBlocking { program }
 
 # &nbsp;&nbsp;Bonus Track
 
-What if we can define `flatMap` and `map` in our Effect System 🤓?
+Can we define `flatMap` and `map` in our Effect System 🤓?
 
 We need to play some tricks. Let's define a class surrounding an effect and implement the `flatMap` and `map` functions on it
 
@@ -790,9 +790,9 @@ If we substitute `inline` functions, we return to the version of `drunkFlip` tha
 
 # &nbsp;&nbsp;Conclusions
 
-* We defined what is a _side effect_ and why we don't like it
-* We introduced the _Effect Pattern_ and the _Effect Systems_ to manage side effects in a controlled way
-* We explored the _Cats Effect_ and _ZIO_ libraries as examples of _über effects_
+* We defined what is a **side effect** and why **we don't like it**
+* We introduced the **Effect Pattern** and the _Effect Systems_ to **manage side effects** in a controlled way
+* We explored the _Cats Effect_ and _ZIO_ libraries as examples of monadic _über effects_
 * We introduced the _Kyo_ library as an example of _Algebraic Effects_
 * We built our own _Effect System_ on top of _Context Functions_
 * We saw how we can still define `flatMap` and `map` in our _Effect System_
@@ -803,7 +803,7 @@ If we substitute `inline` functions, we return to the version of `drunkFlip` tha
 
 # &nbsp;&nbsp;By the way...
  
-**YÆS**, _Yet Another Effect System_, 
+**λÆS**, _Yet Another Effect System_, 
 is a library implementing what we've seen today 😜
 
 ![w:300 h:300](./assets/QR-yaes.png)
